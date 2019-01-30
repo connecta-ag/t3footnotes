@@ -1,0 +1,7 @@
+# Register t3footnotes plugin for ckeditor
+editor:
+  externalPlugins:
+    t3footnotes:
+      resource: "EXT:t3footnotes/Resources/Public/JavaScript/Plugins/t3footnotes/"
+    # TODO: find out, what to put into "route"!!! ... or just use the previous line
+#    typo3image: { resource: "EXT:t3footnotes/Resources/Public/JavaScript/Plugins/plugin.js", route: "t3footnotes_wizard_select_image" }
