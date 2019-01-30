@@ -1,0 +1,44 @@
+###
+# typical build / composer / vendor files and folders to ignore
+#
+/vendor
+/node_modules
+/.build-cache
+/_temp/*
+!/_temp/.gitkeep
+/bin
+/typo3cms
+/composer.phar
+
+
+###
+# Ignoring temporary files (left by e.g. vim)
+# Ignoring by common IDE's used directories/files
+#
+*~
+*.bak
+*.idea
+*.project
+*.swp
+.buildpath
+.cache
+.project
+.session
+.settings
+.TemporaryItems
+.webprj
+nbproject
+.nbproject
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.htpasswd
+.sass-cache
+.tmproj
+*.sublime-project
+*.sublime-workspace;
+.env
