@@ -75,8 +75,41 @@
               id: 'footnotetext',
               label: 'Footnote Text' // TODO: add locallang label
               // validate: CKEDITOR.dialog.validate.notEmpty('Please enter footnote text') // TODO: add locallang label
-            }]
-          }]
+            },]
+          }],
+
+          // the following actions are to be executed after clicking OK inside the modal dialog
+          onOk: function() {
+
+            // TODO: check the following links for nice ideas and options
+            // https://ckeditor.com/docs/ckeditor4/latest/guide/plugin_sdk_sample_1.html
+            // https://github.com/ckeditor/ckeditor-docs-samples/blob/master/tutorial-abbr-acf/abbr/dialogs/abbr.js#L104
+
+            console.log('Hey, this is the onOk event'); // TODO: remove again, once all is working
+            console.log(editor.getSelection().getSelectedText());
+
+            var dialog = this;
+
+            // TODO: think about moving the whole markup creation process to a separate function
+            var footnoteMarkup = editor.document.createElement( 'span' );
+            var footnoteContent = dialog.getValueOf( 'content', 'footnotetext' );
+            footnoteMarkup.setAttribute('class', 'fn-anchor');
+            footnoteMarkup.setAttribute('title', footnoteContent);
+            footnoteMarkup.setAttribute('data-fncontent', footnoteContent);
+            footnoteMarkup.setAttribute('data-fnanchorid', 'fn-xxx');
+            // footnoteMarkup.setText(footnoteContent);
+            footnoteMarkup.setText('[fn]');
+
+            //
+            //footnoteMarkup.setText('just some test content inside the span...');
+
+            //
+            // var id = dialog.getValueOf( 'tab-adv', 'id' );
+            // if ( id )
+            //   abbr.setAttribute( 'id', id );
+            //
+            editor.insertElement( footnoteMarkup );
+          }
         };
       });
 
@@ -119,8 +152,15 @@
 
       console.log('CAG JR: hey, init t3footnotes here!');
 
-    },
 
+      function _buildFootnoteMarkup() {
+
+      }
+
+      function _insertFootnoteMarkup() {
+
+      }
+
+    }
   });
-
 })();
