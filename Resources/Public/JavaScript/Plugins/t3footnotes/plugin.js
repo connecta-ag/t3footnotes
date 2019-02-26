@@ -25,6 +25,14 @@
 
   CKEDITOR.plugins.add('t3footnotes', {
 
+    onLoad: function() {
+      CKEDITOR.addCss(
+          'span.fn-anchor {' +
+            'color: green' +
+          '}',
+      );
+    },
+
     init: function(editor) {
 
       // let's add our button to the RTE and connect its functionality
