@@ -5,3 +5,19 @@ editor:
       resource: "EXT:t3footnotes/Resources/Public/JavaScript/Plugins/t3footnotes/"
     # TODO: find out, what to put into "route"!!! ... or just use the previous line
 #    typo3image: { resource: "EXT:t3footnotes/Resources/Public/JavaScript/Plugins/plugin.js", route: "t3footnotes_wizard_select_image" }
+
+  # some additional config to make the footnote markup work in T3
+  # TODO: somehow, the data-attributes still get stripped away upon saving
+  config:
+    allowedContent: true
+    extraAllowedContent: '*(*)[data-*]; span'
+  processing:
+    allowTags:
+      - span
+    allowAttributes: [class, id, title, dir, lang, xml:lang, itemscope, itemtype, itemprop, data-fncontent, data-fnanchorid]
+
+#    HTMLparser_db:
+#      tags:
+#        span:
+#          rmTagIfNoAttrib: false
+#          allowAttributes: [class, id, title, dir, lang, xml:lang, itemscope, itemtype, itemprop, data-fncontent, data-fnanchorid]
