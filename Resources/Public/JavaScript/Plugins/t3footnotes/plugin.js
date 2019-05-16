@@ -26,11 +26,14 @@
   CKEDITOR.plugins.add('t3footnotes', {
 
     onLoad: function() {
+
+      // adding some basic CSS to make the FNs have a look already
       CKEDITOR.addCss(
           'span.fn-anchor {' +
             'color: green' +
           '}',
       );
+
     },
 
     init: function(editor) {
@@ -46,6 +49,10 @@
       // adding the insert footnote modal dialog
       editor.addCommand('insertFootnote',
           new CKEDITOR.dialogCommand('openInsertFootnoteDialog'));
+
+      // TODO: maybe migrate from inline css (see onLoad function) to a css file here
+      // var pluginDirectory = this.path;
+      // editor.addContentsCss( pluginDirectory + 'styles/example.css' );
 
       CKEDITOR.dialog.add('openInsertFootnoteDialog', function(editor) {
 
@@ -91,14 +98,21 @@
             var dialog = this;
 
             // TODO: think about moving the whole markup creation process to a separate function
+            var selectedText = editor.getSelection().getSelectedText();
             var footnoteMarkup = editor.document.createElement( 'span' );
             var footnoteContent = dialog.getValueOf( 'content', 'footnotetext' );
             footnoteMarkup.setAttribute('class', 'fn-anchor');
             footnoteMarkup.setAttribute('title', footnoteContent);
-            footnoteMarkup.setAttribute('data-fncontent', footnoteContent);
-            footnoteMarkup.setAttribute('data-fnanchorid', 'fn-xxx');
+
+            // TODO: find out why data-attributes would be stripped by RTE config – then maybe use them again
+            // footnoteMarkup.setAttribute('data-fncontent', footnoteContent);
+            // footnoteMarkup.setAttribute('data-fnanchorid', 'fn-xxx');
             // footnoteMarkup.setText(footnoteContent);
-            footnoteMarkup.setText('[fn]');
+            // footnoteMarkup.setText('[fn]');
+
+            footnoteMarkup.setText(selectedText);
+
+            this._buildFootnoteMarkup();
 
             //
             //footnoteMarkup.setText('just some test content inside the span...');
@@ -154,6 +168,8 @@
 
 
       function _buildFootnoteMarkup() {
+
+        console.log('hey ho, from inside _buildFootnoteMarkup()');
 
       }
 
