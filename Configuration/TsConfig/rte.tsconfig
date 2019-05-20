@@ -1,0 +1,10 @@
+
+
+
+RTE.default.customTags = footnote
+
+RTE.default.proc.allowTags := addToList(footnote)
+RTE.default.proc.allowTagsOutside := addToList(footnote)
+RTE.default.proc.denyTags := removeFromList(footnote)
+
+RTE.default.proc.entryHTMLparser_db.allowTags := addToList(footnote)

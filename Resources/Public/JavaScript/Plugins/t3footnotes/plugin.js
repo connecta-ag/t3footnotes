@@ -31,7 +31,7 @@
       CKEDITOR.addCss(
           'span.fn-anchor {' +
             'color: green' +
-          '}',
+          '}'
       );
 
     },
@@ -92,37 +92,62 @@
             // https://ckeditor.com/docs/ckeditor4/latest/guide/plugin_sdk_sample_1.html
             // https://github.com/ckeditor/ckeditor-docs-samples/blob/master/tutorial-abbr-acf/abbr/dialogs/abbr.js#L104
 
-            console.log('Hey, this is the onOk event'); // TODO: remove again, once all is working
-            console.log(editor.getSelection().getSelectedText());
+
 
             var dialog = this;
 
-            // TODO: think about moving the whole markup creation process to a separate function
-            var selectedText = editor.getSelection().getSelectedText();
-            var footnoteMarkup = editor.document.createElement( 'span' );
+
+            console.log('Hey, this is the onOk event'); // TODO: remove again, once all is working
+
+            // get text from tab content and input field footnotetext
             var footnoteContent = dialog.getValueOf( 'content', 'footnotetext' );
-            footnoteMarkup.setAttribute('class', 'fn-anchor');
-            footnoteMarkup.setAttribute('title', footnoteContent);
+
+            console.log(footnoteContent);
+
+            // TODO: think about moving the whole markup creation process to a separate function
+            // build fn markup
+            // <sup>
+            //  <a id="fn-anchor-4"
+            //    class="t3foonotes-anchor"
+            //    href="#fn-content-4"
+            //    title="Zur Erläuterung"
+            //    data-fncontent="Reine Textversion der Fußnote, die unter dem Text komplett und mit Links, etc. zu finden ist"
+            //    >
+            //    [4]
+            //  </a>
+            // </sup>
+
+            var title = 'Zur Erläuterung' // @todo lokalize
+
+            var htmlFootnote = '' +
+              '<sup>' +
+                '<a id="fn-anchor-#n#"' +
+                ' class="t3foonotes-anchor"' +
+                ' href="#fn-content-#n#"' +
+                ' title="' + title + '"' +
+                ' data-fncontent="' + footnoteContent + '"' +
+                '>' +
+                '[#n#]' +
+                '</a>' +
+              '</sup>';
+
+
+            // var footnoteMarkup = editor.document.createElement( 'sup');
+            // var anchor = editor.document.createElement( 'a');
+            // anchor.setAttribute('id', "fn-anchor-#n#");
+            // anchor.setAttribute('href', "#fn-content-#n#");
+            // anchor.setAttribute('title', "Zur Erläuterung");  // @todo lokalize
+            // anchor.setAttribute('data-fncontent', footnoteContent);
+            // footnoteMarkup.append(anchor);
+            // //this._buildFootnoteMarkup();
 
             // TODO: find out why data-attributes would be stripped by RTE config – then maybe use them again
-            // footnoteMarkup.setAttribute('data-fncontent', footnoteContent);
-            // footnoteMarkup.setAttribute('data-fnanchorid', 'fn-xxx');
-            // footnoteMarkup.setText(footnoteContent);
-            // footnoteMarkup.setText('[fn]');
 
-            footnoteMarkup.setText(selectedText);
+            console.log(editor);
 
-            this._buildFootnoteMarkup();
+            editor.insertHtml(htmlFootnote);
 
-            //
-            //footnoteMarkup.setText('just some test content inside the span...');
-
-            //
-            // var id = dialog.getValueOf( 'tab-adv', 'id' );
-            // if ( id )
-            //   abbr.setAttribute( 'id', id );
-            //
-            editor.insertElement( footnoteMarkup );
+            //editor.insertElement( footnoteMarkup );
           }
         };
       });

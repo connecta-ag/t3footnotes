@@ -11,3 +11,11 @@ defined('TYPO3_MODE') or die();
 //);
 //// Add Plugin Configs
 //\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'CKEditor');
+
+
+/**
+ * Page TS Config
+ */
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:t3footnotes/Configuration/TsConfig/rte.tsconfig">');
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript('t3footnotes', 'setup','<INCLUDE_TYPOSCRIPT: source="FILE:EXT:t3footnotes/Configuration/TypoScript/rte.ts">');
