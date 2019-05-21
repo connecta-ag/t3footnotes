@@ -1,19 +1,52 @@
 <?php
-defined('TYPO3_MODE') or die();
+defined('TYPO3_MODE') || die('Access denied.');
 
-// 2019-05-16 CAG JR TODO: check if this file with dummy example code is of any use at all; if not, let's kick it out again one day
+call_user_func(
+    function()
+    {
 
-//\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
-//    'rte_ckeditor_image', 'setup',
-//    '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:rte_ckeditor_image/Configuration/TypoScript/ImageRendering/setup.txt">'
-//);
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'CAG.T3footnotes',
+            'List',
+            [
+                'Footnote' => 'list, show'
+            ],
+            // non-cacheable actions
+            [
+                'Footnote' => ''
+            ]
+        );
 
-//\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:rte_ckeditor_fontawesome/Configuration/TSConfig/rte.txt">');
-//
-//// Fontawesome V4
-//$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['defaultFA4'] = 'EXT:rte_ckeditor_fontawesome/Configuration/RTE/DefaultFA4.yaml';
-//$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['fullFA4'] = 'EXT:rte_ckeditor_fontawesome/Configuration/RTE/FullFA4.yaml';
-//// Fontawesome V5
-//$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['default'] = 'EXT:rte_ckeditor_fontawesome/Configuration/RTE/DefaultFA5.yaml';
-//$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['full'] = 'EXT:rte_ckeditor_fontawesome/Configuration/RTE/FullFA5.yaml';
-//$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['minimal'] = 'EXT:rte_ckeditor_fontawesome/Configuration/RTE/MinimalFA5.yaml';
+
+        // Not needed. Use of the plugin is via lib_object
+        //
+        //        // wizards
+        //        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+        //            'mod {
+        //            wizards.newContentElement.wizardItems.plugins {
+        //                elements {
+        //                    list {
+        //                        iconIdentifier = t3footnotes-plugin-list
+        //                        title = LLL:EXT:t3footnotes/Resources/Private/Language/locallang_db.xlf:tx_t3footnotes_list.name
+        //                        description = LLL:EXT:t3footnotes/Resources/Private/Language/locallang_db.xlf:tx_t3footnotes_list.description
+        //                        tt_content_defValues {
+        //                            CType = list
+        //                            list_type = t3footnotes_list
+        //                        }
+        //                    }
+        //                }
+        //                show = *
+        //            }
+        //       }'
+        //        );
+
+        $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+
+        $iconRegistry->registerIcon(
+            't3footnotes-plugin-list',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:t3footnotes/Resources/Public/Icons/user_plugin_list.svg']
+        );
+
+    }
+);
