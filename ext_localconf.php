@@ -48,5 +48,9 @@ call_user_func(
             ['source' => 'EXT:t3footnotes/Resources/Public/Icons/user_plugin_list.svg']
         );
 
+
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-cached']['t3footnotes'] =
+            \CAG\T3footnotes\Hooks\FootnotesHook::class . '->generateFootnotes';
+
     }
 );
