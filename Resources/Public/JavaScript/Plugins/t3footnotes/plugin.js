@@ -62,6 +62,7 @@
         var dialogTabLabel = 'Insert Footnote Content'; // TODO: add locallang label
         var dialogElementFootnotetextLabel = 'Footnote Text'; // TODO: add locallang label
         var footnoteAnchorTitle = 'Zur Erläuterung'; // TODO: add locallang label
+        var markerFootnoteNumber = '{n}';
 
 
         return {
@@ -88,7 +89,7 @@
           // If a foot note choosed select the foot note and set foot note content in modal dialog.
           onShow: function() {
 
-            var footnoteContent = '', supEl;
+            var footnoteContent = '', supEl, elData;
             var dialog = this;
             var selection = editor.getSelection();
             var el = selection.getStartElement();
@@ -102,7 +103,11 @@
                 selection.selectElement(supEl);
               }
               // set dialog value
-              footnoteContent = el.getAttribute('data-fncontent');
+              elData = el.findOne('span.t3foonotes-anchor-data');
+              if (elData) {
+                footnoteContent = elData.getText();
+              }
+
               if (footnoteContent != '') {
                 dialog.setValueOf('content','footnotetext', footnoteContent);
               }
@@ -117,7 +122,6 @@
             var title = footnoteAnchorTitle;
             var dialog = this;
             var htmlFootnote = '';
-            var markerFootnoteNumber = '#n#';
 
             // get text from tab content and input field footnotetext
             var footnoteContent = dialog.getValueOf( 'content', 'footnotetext' );
@@ -129,9 +133,11 @@
                 ' class="t3foonotes-anchor"' +
                 ' href="#fn-content-' + markerFootnoteNumber + '"' +
                 ' title="' + title + '"' +
-                ' data-fncontent="' + footnoteContent + '"' +
                 '>' +
                 '[' + markerFootnoteNumber + ']' +
+                '<span class="t3foonotes-anchor-data" style="display: none">' +
+                footnoteContent +
+                '</span>'
                 '</a>' +
                 '</sup>';
             }

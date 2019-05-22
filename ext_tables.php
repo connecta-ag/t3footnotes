@@ -14,16 +14,7 @@ call_user_func(
         /**
          * Add contants and typoscript
          */
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
-            't3footnotes',
-            'constants',
-            '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:t3footnotes/Configuration/TypoScript/constants.cts">'
-        );
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
-            't3footnotes',
-            'setup',
-            '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:t3footnotes/Configuration/TypoScript/setup.ts">'
-        );
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('t3footnotes', 'Configuration/TypoScript', 'T3footnotes Plugin');
 
 
     }
