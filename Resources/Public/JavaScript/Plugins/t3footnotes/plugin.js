@@ -25,7 +25,13 @@
 
   CKEDITOR.plugins.add('t3footnotes', {
 
+    lang: "en,de",
+
     onLoad: function() {
+
+      // TODO: maybe migrate from inline css (see onLoad function) to a css file here
+      // var pluginDirectory = this.path;
+      // editor.addContentsCss( pluginDirectory + 'styles/example.css' );
 
       // adding some basic CSS to make the FNs have a look already
       CKEDITOR.addCss(
@@ -41,29 +47,24 @@
 
       // let's add our button to the RTE and connect its functionality
       editor.ui.addButton('T3footnotes', {
-        label: 'Insert Footnote', // TODO: add locallang label
+        label: editor.lang.t3footnotes.ButtonLabel,
         toolbar: 'insert',
         command: 'insertFootnote',
-        icon: this.path + 'icons/t3footnotes.png',
+        icon: this.path + 'icons/t3footnotes.png'
       });
 
       // adding the insert footnote modal dialog
       editor.addCommand('insertFootnote', new CKEDITOR.dialogCommand('openInsertFootnoteDialog'));
 
-      // TODO: maybe migrate from inline css (see onLoad function) to a css file here
-      // var pluginDirectory = this.path;
-      // editor.addContentsCss( pluginDirectory + 'styles/example.css' );
-
       CKEDITOR.dialog.add('openInsertFootnoteDialog', function(editor) {
 
-
         // vars to lokalize
-        var dialogTitle = 'Insert Footnote Dialog'; // TODO: add locallang label
-        var dialogTabLabel = 'Insert Footnote Content'; // TODO: add locallang label
-        var dialogElementFootnotetextLabel = 'Footnote Text'; // TODO: add locallang label
-        var footnoteAnchorTitle = 'Zur Erläuterung'; // TODO: add locallang label
+        var dialogTitle = editor.lang.t3footnotes.DialogTitle;
+        var dialogTabLabel = editor.lang.t3footnotes.DialogTabLabel;
+        var dialogElementFootnotetextLabel = editor.lang.t3footnotes.DialogElementFootnotetextLabel;
+        var footnoteAnchorTitle = editor.lang.t3footnotes.FootnoteAnchorTitle;
+        // other init vars
         var markerFootnoteNumber = '{n}';
-
 
         return {
 
@@ -137,7 +138,7 @@
                 '[' + markerFootnoteNumber + ']' +
                 '<span class="t3foonotes-anchor-data" style="display: none">' +
                 footnoteContent +
-                '</span>'
+                '</span>' +
                 '</a>' +
                 '</sup>';
             }
