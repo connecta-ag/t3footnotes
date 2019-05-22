@@ -49,7 +49,7 @@ call_user_func(
         );
 
 
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-cached']['t3footnotes'] =
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all']['t3footnotes'] =
             \CAG\T3footnotes\Hooks\FootnotesHook::class . '->generateFootnotes';
 
     }

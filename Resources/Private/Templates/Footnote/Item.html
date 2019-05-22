@@ -1,0 +1,21 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Empty" />
+
+This Template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+Resources:
+Private:
+Templates:
+List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="content">
+  <li id="fn-content-{footnote.nr}">
+    <a href="#fn-anchor-{footnote.nr}" title="{f:translate(key: 'tx_t3footnotes.back-to-anchor', extensionName: 't3footnotes')}">[{footnote.nr}]</a>
+    <f:format.raw>{footnote.data}</f:format.raw>
+  </li>
+</f:section>
+</html>
