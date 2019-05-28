@@ -27,6 +27,8 @@
 
     lang: "en,de",
 
+    footNoteElement: 'span',
+
     onLoad: function() {
 
       // TODO: maybe migrate from inline css (see onLoad function) to a css file here
@@ -112,15 +114,16 @@
                 selection.selectElement(supEl);
               }
               // set dialog value
-              elData = el.findOne('span.t3foonotes-anchor-data');
+              elData = supEl.findOne(plugin.footNoteElement + '.t3foonotes-anchor-data');
               if (elData) {
-                footnoteContent = elData.getText();
+                //footnoteContent = elData.getText();
+                footnoteContent = elData.getHtml();
               }
 
               if (footnoteContent != '') {
                 dialog.setValueOf('content','footnotetext', footnoteContent);
               }
-            } 
+            }
           },
 
 
@@ -144,10 +147,10 @@
                 ' title="' + title + '"' +
                 '>' +
                 '[' + markerFootnoteNumber + ']' +
-                '<span class="t3foonotes-anchor-data" style="display: none">' +
-                footnoteContent +
-                '</span>' +
                 '</a>' +
+                '<' + plugin.footNoteElement + ' class="t3foonotes-anchor-data" style="display: none">' +
+                footnoteContent +
+                '</' + plugin.footNoteElement + '>' +
                 '</sup>';
             }
 
