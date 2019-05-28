@@ -45,6 +45,8 @@
 
     init: function(editor) {
 
+      var plugin = this;
+
       // let's add our button to the RTE and connect its functionality
       editor.ui.addButton('T3footnotes', {
         label: editor.lang.t3footnotes.ButtonLabel,
@@ -95,6 +97,12 @@
             var selection = editor.getSelection();
             var el = selection.getStartElement();
 
+            // reset selecttion if content selected
+            var range = selection.getRanges()[0];
+            range.collapse(false);
+            var newRanges = [range];
+            selection.selectRanges(newRanges);
+
 
             // do some thing if in a foot note
             if(el.hasClass('t3foonotes-anchor')) {
@@ -112,7 +120,7 @@
               if (footnoteContent != '') {
                 dialog.setValueOf('content','footnotetext', footnoteContent);
               }
-            }
+            } 
           },
 
 
