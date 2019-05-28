@@ -66,14 +66,13 @@ class FootnotesHook
     {
         // init vars
         $patternFootnoteAnchors = '/<sup[ ]+class="t3foonote">(?:.(?!\<\/sup\>))*.<\/sup>/i';
-        $patternDataAttrFootnoteAnchor = '/(<span[ ]+class="t3foonotes-anchor-data".*>)((?:.(?!\<\/span\>))*.)(<\/span>)/i';
+        $patternDataAttrFootnoteAnchor = '/(<span[ ]+class="t3foonotes-anchor-data".*?>)((?:.(?!\<\/span\>))*.)(<\/span>)/i';
         $tempMarkerAnchor = '#########SUP#########';
         $patterntempMarkerAnchor = '/' . $tempMarkerAnchor . '/';
         $matchesFootnoteData = [];
         $footnotes = [];
 
         $footnoteAnchors = $this->getFootnotesAnchors($patternFootnoteAnchors, $pObj);
-
 
         // if found footnotes anchors process build footnotes
         if ($footnoteAnchors) {
@@ -91,7 +90,8 @@ class FootnotesHook
                 preg_match($patternDataAttrFootnoteAnchor, $footnoteAnchor, $matchesFootnoteData);
 
                 if (sizeof($matchesFootnoteData) == 4) {
-                    $footnotes[] = ['data' => $matchesFootnoteData[2], 'nr' => $nr];
+                    $footnoteContent = $matchesFootnoteData[2];
+                    $footnotes[] = ['data' => $footnoteContent, 'nr' => $nr];
                     $footnoteAnchor = preg_replace($patternDataAttrFootnoteAnchor, '', $footnoteAnchor);
                 }
 
