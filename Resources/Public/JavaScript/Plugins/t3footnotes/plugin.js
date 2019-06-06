@@ -84,8 +84,10 @@
 
             // adding elements to the dialog
             elements: [{
-              type: 'text',
+              type: 'textarea',
               id: 'footnotetext',
+              cols: 60,
+              rows: 16,
               label: dialogElementFootnotetextLabel
             }]
           }],
