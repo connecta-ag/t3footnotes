@@ -7,7 +7,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /***
@@ -66,13 +65,20 @@ class FootnotesHook
     {
         // init vars
         $patternFootnoteAnchors = '/<sup[ ]+class="t3foonote">(?:.(?!\<\/sup\>))*.<\/sup>/i';
-        $patternDataAttrFootnoteAnchor = '/(<span[ ]+class="t3foonotes-anchor-data".*?>)((?:.(?!\<\/span\>))*.)(<\/span>)/i';
+        $patternFootnoteAnchorDataAttr = '/(<span[ ]+class="t3foonotes-anchor-data".*?>)((?:.(?!\<\/span\>))*.)(<\/span>)/i';
+        $patternFootnoteAnchorLink = '/(<a.*?class="t3foonotes-anchor".*?>)((?:.(?!\<\/a\>))*.)(<\/a>)/i';
+
+        $hrefPattern = '/(href=".*?")/i';
+
         $tempMarkerAnchor = '#########SUP#########';
         $patterntempMarkerAnchor = '/' . $tempMarkerAnchor . '/';
         $matchesFootnoteData = [];
         $footnotes = [];
 
         $footnoteAnchors = $this->getFootnotesAnchors($patternFootnoteAnchors, $pObj);
+
+        $currentUrl = $pObj->cObj->getUrlToCurrentLocation(true);
+
 
         // if found footnotes anchors process build footnotes
         if ($footnoteAnchors) {
@@ -87,28 +93,45 @@ class FootnotesHook
             foreach ($footnoteAnchors as $index => $footnoteAnchor) {
 
                 // get footnote text and remove data span
-                preg_match($patternDataAttrFootnoteAnchor, $footnoteAnchor, $matchesFootnoteData);
+                preg_match($patternFootnoteAnchorDataAttr, $footnoteAnchor, $matchesFootnoteData);
+                preg_match($patternFootnoteAnchorLink, $footnoteAnchor, $matchesFootnoteLink);
 
-                if (sizeof($matchesFootnoteData) == 4) {
+                // build only valid anchors with anchol link and content
+                if (sizeof($matchesFootnoteData) == 4 && sizeof($matchesFootnoteLink) == 4) {
                     $footnoteContent = $matchesFootnoteData[2];
-                    $footnotes[] = ['data' => $footnoteContent, 'nr' => $nr];
-                    $footnoteAnchor = preg_replace($patternDataAttrFootnoteAnchor, '', $footnoteAnchor);
-                }
 
-                // set anchor numbers
-                $footnoteAnchor = str_replace(
-                    [self::MARKER_FOOTNOTE_ANCHOR_NR, urlencode(self::MARKER_FOOTNOTE_ANCHOR_NR)],
-                    $nr,
-                    $footnoteAnchor
-                );
+                        $footnotes[] = ['data' => $footnoteContent, 'nr' => $nr];
+                        $footnoteAnchor = preg_replace($patternFootnoteAnchorDataAttr, '', $footnoteAnchor);
+
+                        $hrefToReplace = "href=\"" . $currentUrl . '#fn-content-' . self::MARKER_FOOTNOTE_ANCHOR_NR . "\"";
+
+                        // set right anchor link
+                        $footnoteAnchor = preg_replace($hrefPattern, $hrefToReplace, $footnoteAnchor);
+
+
+                        // set anchor numbers
+                        $footnoteAnchor = str_replace(
+                            [self::MARKER_FOOTNOTE_ANCHOR_NR, urlencode(self::MARKER_FOOTNOTE_ANCHOR_NR)],
+                            $nr,
+                            $footnoteAnchor
+                        );
+
+                        $nr++;
+
+                } else {
+                    $footnotes[] = ['data' => '', 'nr' => 0];
+                    $footnoteAnchor = '';
+                }
 
                 // replace first (current) temp anchor marker in content by modified footnote anchor
                 $pObj->content = preg_replace ( $patterntempMarkerAnchor, $footnoteAnchor, $pObj->content, $limitTempMarkerAnchor);
 
 
-                $nr++;
+
             }
         }
+
+
 
         $containerFootnotes = $this->buildFootnotesContainer($footnotes, $pObj);
 
@@ -154,7 +177,9 @@ class FootnotesHook
                 $footnotesHtml = '';
 
                 foreach ($footnotes as $footnote) {
-                    $footnotesHtml .= $this->buildFootnoteItem($footnote);
+                    if ($footnote['nr'] != 0) {
+                        $footnotesHtml .= $this->buildFootnoteItem($footnote);
+                    }
                 }
 
                 $containerFootnotes = str_replace(self::MARKER_FOOTNOTES, $footnotesHtml, $containerFootnotes);
