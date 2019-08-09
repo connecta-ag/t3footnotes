@@ -109,7 +109,7 @@
 
 
             // do some thing if in a foot note
-            if(el.hasClass('t3foonotes-anchor')) {
+            if(el.hasClass('t3foonotes-anchor') || el.hasClass('t3foonotes-anchor-data')) {
               // select footnote
               supEl = el.getParent();
               if (supEl.hasClass('t3foonote')) {
