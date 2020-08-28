@@ -11,7 +11,7 @@
  ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = array(
-	'title' => 't3footnotes',
+	'title' => 'RTE footnotes and references',
 	'description' => 'TYPO3 extension to add footnote functionality to TYPO3\'s integrated RTE CKEditor',
 	'category' => 'misc',
 	'author' => 'Jochen Rieger',
@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'uploadfolder' => '0',
 	'createDirs' => '',
 	'clearCacheOnLoad' => 0,
-	'version' => '0.1.1',
+	'version' => '1.3.0',
 	'constraints' => array(
 		'depends' => array(
             'typo3' => '8.7.0-9.5.99',

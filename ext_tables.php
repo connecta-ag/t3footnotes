@@ -1,13 +1,22 @@
 <?php
 defined('TYPO3_MODE') or die();
 
-// 2019-05-16 CAG JR TODO: check if this file is of any use at all; if not, let's kick it out again one day
+call_user_func(
+    function()
+    {
 
-// Register Plugin and namespaces
-//\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-//    'CAG.' . $_EXTKEY,
-//    'CKEditor',
-//    'CKEditor'
-//);
-//// Add Plugin Configs
-//\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'CKEditor');
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+            'CAG.T3footnotes',
+            'List',
+            'Footnotes'
+        );
+
+        /**
+         * Add contants and typoscript
+         */
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('t3footnotes', 'Configuration/TypoScript', 'T3footnotes Plugin');
+
+
+    }
+);
+

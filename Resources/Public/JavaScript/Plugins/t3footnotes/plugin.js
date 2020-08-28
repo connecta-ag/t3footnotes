@@ -25,157 +25,142 @@
 
   CKEDITOR.plugins.add('t3footnotes', {
 
+    lang: "en,de",
+
+    footNoteElement: 'span',
+
     onLoad: function() {
+
+      // TODO: maybe migrate from inline css (see onLoad function) to a css file here
+      // var pluginDirectory = this.path;
+      // editor.addContentsCss( pluginDirectory + 'styles/example.css' );
 
       // adding some basic CSS to make the FNs have a look already
       CKEDITOR.addCss(
-          'span.fn-anchor {' +
-            'color: green' +
-          '}',
+          'a.t3foonotes-anchor {' +
+            'color: green;' +
+            'text-width: bold;' +
+          '}'
       );
 
     },
 
     init: function(editor) {
 
+      var plugin = this;
+
       // let's add our button to the RTE and connect its functionality
       editor.ui.addButton('T3footnotes', {
-        label: 'Insert Footnote', // TODO: add locallang label
+        label: editor.lang.t3footnotes.ButtonLabel,
         toolbar: 'insert',
         command: 'insertFootnote',
-        icon: this.path + 'icons/t3footnotes.png',
+        icon: this.path + 'icons/t3footnotes.png'
       });
 
       // adding the insert footnote modal dialog
-      editor.addCommand('insertFootnote',
-          new CKEDITOR.dialogCommand('openInsertFootnoteDialog'));
-
-      // TODO: maybe migrate from inline css (see onLoad function) to a css file here
-      // var pluginDirectory = this.path;
-      // editor.addContentsCss( pluginDirectory + 'styles/example.css' );
+      editor.addCommand('insertFootnote', new CKEDITOR.dialogCommand('openInsertFootnoteDialog'));
 
       CKEDITOR.dialog.add('openInsertFootnoteDialog', function(editor) {
 
-        var abc = 123;
+        // vars to lokalize
+        var dialogTitle = editor.lang.t3footnotes.DialogTitle;
+        var dialogTabLabel = editor.lang.t3footnotes.DialogTabLabel;
+        var dialogElementFootnotetextLabel = editor.lang.t3footnotes.DialogElementFootnotetextLabel;
+        var footnoteAnchorTitle = editor.lang.t3footnotes.FootnoteAnchorTitle;
+        // other init vars
+        var markerFootnoteNumber = '{n}';
 
         return {
 
-          title: 'Insert Footnote Dialog', // TODO: add locallang label
+          title: dialogTitle,
           minWidth: 400,
           minHeight: 200,
-
-          onShow: function() {
-
-            // alert('hey ho onShow');
-
-          },
 
           // adding the modal dialog content
           contents: [{
 
             id: 'content',
-            label: 'Insert Footnote Content', // TODO: add locallang label
+            label: dialogTabLabel,
 
             // adding elements to the dialog
             elements: [{
-              type: 'text',
+              type: 'textarea',
               id: 'footnotetext',
-              label: 'Footnote Text' // TODO: add locallang label
-              // validate: CKEDITOR.dialog.validate.notEmpty('Please enter footnote text') // TODO: add locallang label
-            },]
+              cols: 60,
+              rows: 16,
+              label: dialogElementFootnotetextLabel
+            }]
           }],
+
+          // On show action of the dialog checking for edit mode.
+          // If a foot note choosed select the foot note and set foot note content in modal dialog.
+          onShow: function() {
+
+            var footnoteContent = '', supEl, elData;
+            var dialog = this;
+            var selection = editor.getSelection();
+            var el = selection.getStartElement();
+
+            // reset selecttion if content selected
+            var range = selection.getRanges()[0];
+            range.collapse(false);
+            var newRanges = [range];
+            selection.selectRanges(newRanges);
+
+
+            // do some thing if in a foot note
+            if(el.hasClass('t3foonotes-anchor') || el.hasClass('t3foonotes-anchor-data')) {
+              // select footnote
+              supEl = el.getParent();
+              if (supEl.hasClass('t3foonote')) {
+                selection.selectElement(supEl);
+              }
+              // set dialog value
+              elData = supEl.findOne(plugin.footNoteElement + '.t3foonotes-anchor-data');
+              if (elData) {
+                //footnoteContent = elData.getText();
+                footnoteContent = elData.getHtml();
+              }
+
+              if (footnoteContent != '') {
+                dialog.setValueOf('content','footnotetext', footnoteContent);
+              }
+            }
+          },
+
+
 
           // the following actions are to be executed after clicking OK inside the modal dialog
           onOk: function() {
 
-            // TODO: check the following links for nice ideas and options
-            // https://ckeditor.com/docs/ckeditor4/latest/guide/plugin_sdk_sample_1.html
-            // https://github.com/ckeditor/ckeditor-docs-samples/blob/master/tutorial-abbr-acf/abbr/dialogs/abbr.js#L104
-
-            console.log('Hey, this is the onOk event'); // TODO: remove again, once all is working
-            console.log(editor.getSelection().getSelectedText());
-
+            var title = footnoteAnchorTitle;
             var dialog = this;
+            var htmlFootnote = '';
 
-            // TODO: think about moving the whole markup creation process to a separate function
-            var selectedText = editor.getSelection().getSelectedText();
-            var footnoteMarkup = editor.document.createElement( 'span' );
+            // get text from tab content and input field footnotetext
             var footnoteContent = dialog.getValueOf( 'content', 'footnotetext' );
-            footnoteMarkup.setAttribute('class', 'fn-anchor');
-            footnoteMarkup.setAttribute('title', footnoteContent);
 
-            // TODO: find out why data-attributes would be stripped by RTE config – then maybe use them again
-            // footnoteMarkup.setAttribute('data-fncontent', footnoteContent);
-            // footnoteMarkup.setAttribute('data-fnanchorid', 'fn-xxx');
-            // footnoteMarkup.setText(footnoteContent);
-            // footnoteMarkup.setText('[fn]');
+            if (footnoteContent != '') {
+              htmlFootnote = '' +
+                '<sup class="t3foonote">' +
+                '<a id="fn-anchor-' + markerFootnoteNumber + '"' +
+                ' class="t3foonotes-anchor"' +
+                ' href="#fn-content-' + markerFootnoteNumber + '"' +
+                ' title="' + title + '"' +
+                '>' +
+                '[' + markerFootnoteNumber + ']' +
+                '</a>' +
+                '<' + plugin.footNoteElement + ' class="t3foonotes-anchor-data" style="display: none">' +
+                footnoteContent +
+                '</' + plugin.footNoteElement + '>' +
+                '</sup>';
+            }
 
-            footnoteMarkup.setText(selectedText);
+            editor.insertHtml(htmlFootnote);
 
-            this._buildFootnoteMarkup();
-
-            //
-            //footnoteMarkup.setText('just some test content inside the span...');
-
-            //
-            // var id = dialog.getValueOf( 'tab-adv', 'id' );
-            // if ( id )
-            //   abbr.setAttribute( 'id', id );
-            //
-            editor.insertElement( footnoteMarkup );
           }
         };
       });
-
-      // first working example, simple – without any text input opportunity; TODO: might have to be deleted again, later
-      // editor.addCommand('insertFootnote', {
-      //
-      //   // exec: function (editor) {
-      //   //   console.log('CAG JR: hey! this ist the command "insertFootnote"');
-      //   // }
-      //
-      //   exec: openInsertFootnoteModal
-      //
-      // });
-
-      // TODO: see, if it's needed or not anymore, in the end
-      // function openInsertFootnoteModal(editor) {
-      //
-      //   // ...
-      //   var selection = editor.getSelection(),
-      //       content = 'No text selected'; // TODO: add locallang label
-      //
-      //   if (selection && selection.getSelectedText()) {
-      //     content = 'Add footnote content referring to selected text: ' + selection.getSelectedText(); // TODO: add locallang label
-      //   }
-      //
-      //   // TODO: remove again - it's just for showing how to add content to the editor's html
-      //   // var now = new Date();
-      //   // editor.insertHtml( 'The current date and time is: <em>' + now.toString() + '</em>' );
-      //
-      //
-      //   require([
-      //       'TYPO3/CMS/Backend/Modal'
-      //   ], function (Modal) {
-      //     Modal.show(
-      //         'Insert Footnote', // TODO: add locallang label
-      //         content
-      //     );
-      //   });
-      // }
-
-      console.log('CAG JR: hey, init t3footnotes here!');
-
-
-      function _buildFootnoteMarkup() {
-
-        console.log('hey ho, from inside _buildFootnoteMarkup()');
-
-      }
-
-      function _insertFootnoteMarkup() {
-
-      }
 
     }
   });
