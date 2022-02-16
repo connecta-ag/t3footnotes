@@ -40,7 +40,10 @@ class FootnotesHook
      */
     protected $objectManager;
 
-    protected $fonfig = null;
+    /**
+     * @var array
+     */
+    protected $config = [];
 
 
     public function __construct()
@@ -53,7 +56,7 @@ class FootnotesHook
         $tsService = GeneralUtility::makeInstance(TypoScriptService::class);
         $fullTs = $this->configurationManager->getConfiguration($this->configurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 
-        $this->config = $tsService->convertTypoScriptArrayToPlainArray($fullTs['plugin.']['tx_t3footnotes.']);
+        $this->config = $tsService->convertTypoScriptArrayToPlainArray($fullTs['plugin.']['tx_t3footnotes.'] ?? []);
     }
 
     /**
@@ -62,6 +65,10 @@ class FootnotesHook
      */
     public function generateFootnotes($params, $pObj)
     {
+        if (empty($this->config)) {
+            return;
+        }
+
         // init vars
         $patternFootnoteAnchors = '/<sup[ ]+class="t3foonote">(?:.(?!\<\/sup\>))*.<\/sup>/i';
         $patternFootnoteAnchorDataAttr = '/(<span[ ]+class="t3foonotes-anchor-data".*?>)((?:.(?!\<\/span\>))*.)(<\/span>)/i';
