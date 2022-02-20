@@ -9,12 +9,10 @@ call_user_func(
             'CAG.T3footnotes',
             'List',
             [
-                'Footnote' => 'list, show'
+                CAG\T3footnotes\Controller\FootnoteController::class => 'list, show'
             ],
             // non-cacheable actions
-            [
-                'Footnote' => ''
-            ]
+            []
         );
 
 
