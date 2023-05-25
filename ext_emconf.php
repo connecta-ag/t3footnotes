@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /***************************************************************
  * Extension Manager/Repository config file for ext: "t3footnotes"
  *
@@ -29,5 +31,10 @@ $EM_CONF[$_EXTKEY] = [
             'typo3' => '8.7.0-11.5.99',
             'rte_ckeditor' => '8.7.0-11.5.99'
         ]
-    ]
+    ],
+    'autoload' => [
+        'psr-4' => [
+            'AG\\T3footnotes\\' => 'Classes'
+        ],
+    ],
 ];
