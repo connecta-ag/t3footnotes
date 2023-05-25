@@ -1,5 +1,5 @@
 <?php
-defined('TYPO3_MODE') or die();
+defined('TYPO3_MODE') || die();
 
 call_user_func(
     function()
@@ -16,7 +16,5 @@ call_user_func(
          */
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('t3footnotes', 'Configuration/TypoScript', 'T3footnotes Plugin');
 
-
     }
 );
-

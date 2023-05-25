@@ -1,6 +1,8 @@
 <?php
-namespace CAG\T3footnotes\Hooks;
 
+declare(strict_types=1);
+
+namespace CAG\T3footnotes\Hooks;
 
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -15,9 +17,10 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *
- *  (c) 2019
+ * (c) 2019
  *
  ***/
+
 /**
  * FootnoteController
  */
@@ -125,11 +128,8 @@ class FootnotesHook
                 // replace first (current) temp anchor marker in content by modified footnote anchor
                 $pObj->content = preg_replace ( $patterntempMarkerAnchor, $footnoteAnchor, $pObj->content, $limitTempMarkerAnchor);
 
-
-
             }
         }
-
 
 
         $containerFootnotes = $this->buildFootnotesContainer($footnotes, $pObj);
@@ -208,6 +208,5 @@ class FootnotesHook
 
         return $footnoteHtml;
     }
-
 
 }

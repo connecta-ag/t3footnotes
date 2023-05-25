@@ -24,7 +24,7 @@ TYPO3 extension to add footnotes to TYPO3's integrated RTE CKEditor
 
 #### Add TypoScript configuration
 
-As include in your main template (setup, constants) 
+As include in your main template (setup, constants)
 
 Contants
 ```
