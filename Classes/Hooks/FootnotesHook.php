@@ -34,32 +34,6 @@ class FootnotesHook
 
 
     /**
-     * @var ConfigurationManager
-     */
-    protected $configurationManager;
-
-    /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
-    protected $fonfig = null;
-
-
-    public function __construct()
-    {
-        $this->configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
-
-        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-
-        /** @var  TypoScriptService $tsService */
-        $tsService = GeneralUtility::makeInstance(TypoScriptService::class);
-        $fullTs = $this->configurationManager->getConfiguration($this->configurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-
-        $this->config = $tsService->convertTypoScriptArrayToPlainArray($fullTs['plugin.']['tx_t3footnotes.']);
-    }
-
-    /**
      * @param array $params
      * @param \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $pObj
      */
@@ -173,11 +147,20 @@ class FootnotesHook
 
                 $containerFootnotes = $matches_container[2];
 
-                $footnotesHtml = '';
+                $extFullTs = GeneralUtility::makeInstance(ConfigurationManager::class)->getConfiguration(extConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+                $extConfig = GeneralUtility::makeInstance(TypoScriptService::class)->convertTypoScriptArrayToPlainArray($extFullTs['plugin.']['tx_t3footnotes.']);
 
+                $tplView = GeneralUtility::makeInstance(ObjectManager::class)->get(StandaloneView::class);
+                $tplView->setTemplateRootPaths($extConfig['view']['templateRootPaths']);
+                $tplView->setPartialRootPaths($extConfig['view']['partialRootPaths']);
+                $tplView->setLayoutRootPaths($extConfig['view']['layoutRootPaths']);
+                $tplView->setTemplate('Footnote/Item');
+
+
+                $footnotesHtml = '';
                 foreach ($footnotes as $footnote) {
                     if ($footnote['nr'] != 0) {
-                        $footnotesHtml .= $this->buildFootnoteItem($footnote);
+                        $footnotesHtml .= $tplView->assign('footnote', $footnote)->render();
                     }
                 }
 
@@ -186,27 +169,6 @@ class FootnotesHook
         }
 
         return $containerFootnotes;
-    }
-
-
-    /**
-     * @param $footnote
-     */
-    protected function buildFootnoteItem($footnote)
-    {
-
-        /** @var StandaloneView $tplView */
-        $tplView = $this->objectManager->get(StandaloneView::class);
-
-        $tplView->setTemplateRootPaths($this->config['view']['templateRootPaths']);
-        $tplView->setPartialRootPaths($this->config['view']['partialRootPaths']);
-        $tplView->setLayoutRootPaths($this->config['view']['layoutRootPaths']);
-        $tplView->setTemplate('Footnote/Item');
-
-        $tplView->assign('footnote', $footnote);
-        $footnoteHtml = $tplView->render();
-
-        return $footnoteHtml;
     }
 
 }
