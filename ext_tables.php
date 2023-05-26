@@ -8,6 +8,10 @@ call_user_func(
             'CAG.T3footnotes',
             'List',
             'Footnotes'
+            [
+                CAG\T3footnotes\Controller\FootnoteController::class => 'list,show'
+            ],
+            []
         );
 
         /**
