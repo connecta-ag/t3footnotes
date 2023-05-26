@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /***************************************************************
  * Extension Manager/Repository config file for ext: "t3footnotes"
  *

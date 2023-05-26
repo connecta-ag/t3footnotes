@@ -1,7 +1,5 @@
 <?php defined('TYPO3_MODE') || defined('TYPO3') || die();
 
-declare(strict_types=1);
-
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'T3footnotes',
     'Footnotes',
