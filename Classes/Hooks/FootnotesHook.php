@@ -74,6 +74,7 @@ class FootnotesHook
 
                 // build only valid anchors with anchol link and content
                 if (sizeof($matchesFootnoteData) == 4 && sizeof($matchesFootnoteLink) == 4) {
+
                     $footnoteContent = $matchesFootnoteData[2];
 
                         $footnotes[] = ['data' => $footnoteContent, 'nr' => $nr];
@@ -141,8 +142,10 @@ class FootnotesHook
         $containerFootnotes = '';
 
         if (sizeof($footnotes)) {
+
             $patternContainer = '/(' . self::MARKER_FOOTNOTES_START . ')([\w\W]*)(?=' . self::MARKER_FOOTNOTES_END . ')(' . self::MARKER_FOOTNOTES_END . ')/';
             preg_match($patternContainer, $pObj->content, $matches_container);
+
             if(sizeof($matches_container) == 4) {
 
                 $containerFootnotes = $matches_container[2];
