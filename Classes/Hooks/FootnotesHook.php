@@ -80,11 +80,10 @@ class FootnotesHook
                         $footnotes[] = ['data' => $footnoteContent, 'nr' => $nr];
                         $footnoteAnchor = preg_replace($patternFootnoteAnchorDataAttr, '', $footnoteAnchor);
 
-                        $hrefToReplace = "href=\"" . $currentUrl . '#fn-content-' . self::MARKER_FOOTNOTE_ANCHOR_NR . "\"";
+                        $hrefToReplace = 'href="' . $currentUrl . '#fn-content-' . self::MARKER_FOOTNOTE_ANCHOR_NR . '"';
 
                         // set right anchor link
                         $footnoteAnchor = preg_replace($hrefPattern, $hrefToReplace, $footnoteAnchor);
-
 
                         // set anchor numbers
                         $footnoteAnchor = str_replace(
