@@ -88,8 +88,8 @@ class FootnotesHook
 
                         // set anchor numbers
                         $footnoteAnchor = str_replace(
-                            [self::MARKER_FOOTNOTE_ANCHOR_NR, urlencode(self::MARKER_FOOTNOTE_ANCHOR_NR)],
-                            $nr,
+                            self::MARKER_FOOTNOTE_ANCHOR_NR,
+                            (string) $nr,
                             $footnoteAnchor
                         );
 
