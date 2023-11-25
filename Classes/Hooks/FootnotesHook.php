@@ -1,6 +1,8 @@
 <?php
-namespace CAG\T3footnotes\Hooks;
 
+declare(strict_types=1);
+
+namespace CAG\T3footnotes\Hooks;
 
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -15,9 +17,10 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *
- *  (c) 2019
+ * (c) 2019
  *
  ***/
+
 /**
  * FootnoteController
  */
@@ -29,32 +32,6 @@ class FootnotesHook
     const MARKER_FOOTNOTES_END = '###FOOTNOTES_END###';
     const MARKER_FOOTNOTE_ANCHOR_NR = '{n}';
 
-
-    /**
-     * @var ConfigurationManager
-     */
-    protected $configurationManager;
-
-    /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
-    protected $fonfig = null;
-
-
-    public function __construct()
-    {
-        $this->configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
-
-        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-
-        /** @var  TypoScriptService $tsService */
-        $tsService = GeneralUtility::makeInstance(TypoScriptService::class);
-        $fullTs = $this->configurationManager->getConfiguration($this->configurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-
-        $this->config = $tsService->convertTypoScriptArrayToPlainArray($fullTs['plugin.']['tx_t3footnotes.']);
-    }
 
     /**
      * @param array $params
@@ -97,21 +74,21 @@ class FootnotesHook
 
                 // build only valid anchors with anchol link and content
                 if (sizeof($matchesFootnoteData) == 4 && sizeof($matchesFootnoteLink) == 4) {
+
                     $footnoteContent = $matchesFootnoteData[2];
 
                         $footnotes[] = ['data' => $footnoteContent, 'nr' => $nr];
                         $footnoteAnchor = preg_replace($patternFootnoteAnchorDataAttr, '', $footnoteAnchor);
 
-                        $hrefToReplace = "href=\"" . $currentUrl . '#fn-content-' . self::MARKER_FOOTNOTE_ANCHOR_NR . "\"";
+                        $hrefToReplace = 'href="' . $currentUrl . '#fn-content-' . self::MARKER_FOOTNOTE_ANCHOR_NR . '"';
 
                         // set right anchor link
                         $footnoteAnchor = preg_replace($hrefPattern, $hrefToReplace, $footnoteAnchor);
 
-
                         // set anchor numbers
                         $footnoteAnchor = str_replace(
-                            [self::MARKER_FOOTNOTE_ANCHOR_NR, urlencode(self::MARKER_FOOTNOTE_ANCHOR_NR)],
-                            $nr,
+                            self::MARKER_FOOTNOTE_ANCHOR_NR,
+                            (string) $nr,
                             $footnoteAnchor
                         );
 
@@ -125,11 +102,8 @@ class FootnotesHook
                 // replace first (current) temp anchor marker in content by modified footnote anchor
                 $pObj->content = preg_replace ( $patterntempMarkerAnchor, $footnoteAnchor, $pObj->content, $limitTempMarkerAnchor);
 
-
-
             }
         }
-
 
 
         $containerFootnotes = $this->buildFootnotesContainer($footnotes, $pObj);
@@ -167,17 +141,28 @@ class FootnotesHook
         $containerFootnotes = '';
 
         if (sizeof($footnotes)) {
+
             $patternContainer = '/(' . self::MARKER_FOOTNOTES_START . ')([\w\W]*)(?=' . self::MARKER_FOOTNOTES_END . ')(' . self::MARKER_FOOTNOTES_END . ')/';
             preg_match($patternContainer, $pObj->content, $matches_container);
+
             if(sizeof($matches_container) == 4) {
 
                 $containerFootnotes = $matches_container[2];
 
-                $footnotesHtml = '';
+                $extFullTs = GeneralUtility::makeInstance(ConfigurationManager::class)->getConfiguration(extConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+                $extConfig = GeneralUtility::makeInstance(TypoScriptService::class)->convertTypoScriptArrayToPlainArray($extFullTs['plugin.']['tx_t3footnotes.']);
 
+                $tplView = GeneralUtility::makeInstance(ObjectManager::class)->get(StandaloneView::class);
+                $tplView->setTemplateRootPaths($extConfig['view']['templateRootPaths']);
+                $tplView->setPartialRootPaths($extConfig['view']['partialRootPaths']);
+                $tplView->setLayoutRootPaths($extConfig['view']['layoutRootPaths']);
+                $tplView->setTemplate('Footnote/Item');
+
+
+                $footnotesHtml = '';
                 foreach ($footnotes as $footnote) {
                     if ($footnote['nr'] != 0) {
-                        $footnotesHtml .= $this->buildFootnoteItem($footnote);
+                        $footnotesHtml .= $tplView->assign('footnote', $footnote)->render();
                     }
                 }
 
@@ -187,27 +172,5 @@ class FootnotesHook
 
         return $containerFootnotes;
     }
-
-
-    /**
-     * @param $footnote
-     */
-    protected function buildFootnoteItem($footnote)
-    {
-
-        /** @var StandaloneView $tplView */
-        $tplView = $this->objectManager->get(StandaloneView::class);
-
-        $tplView->setTemplateRootPaths($this->config['view']['templateRootPaths']);
-        $tplView->setPartialRootPaths($this->config['view']['partialRootPaths']);
-        $tplView->setLayoutRootPaths($this->config['view']['layoutRootPaths']);
-        $tplView->setTemplate('Footnote/Item');
-
-        $tplView->assign('footnote', $footnote);
-        $footnoteHtml = $tplView->render();
-
-        return $footnoteHtml;
-    }
-
 
 }

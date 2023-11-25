@@ -10,26 +10,31 @@
  * "version" and "dependencies" must not be touched!
  ***************************************************************/
 
-$EM_CONF[$_EXTKEY] = array(
-	'title' => 'RTE footnotes and references',
-	'description' => 'TYPO3 extension to add footnote functionality to TYPO3\'s integrated RTE CKEditor',
-	'category' => 'misc',
-	'author' => 'Jochen Rieger',
-	'author_email' => 'j.rieger@connecta.ag',
-	'state' => 'beta',
-	'internal' => '',
-	'uploadfolder' => '0',
-	'createDirs' => '',
-	'clearCacheOnLoad' => 0,
-	'version' => '1.3.0',
-	'constraints' => array(
-		'depends' => array(
-            'typo3' => '8.7.0-10.4.99',
-            'rte_ckeditor' => '8.7.0-10.4.99'
-		),
-		'conflicts' => array(
-		),
-		'suggests' => array(
-		),
-	),
-);
+$EM_CONF[$_EXTKEY] = [
+    'title' => 'RTE footnotes and references',
+    'description' => 'TYPO3 extension to add footnote functionality to TYPO3\'s integrated RTE CKEditor',
+    'category' => 'misc',
+    'author' => 'Jochen Rieger',
+    'author_email' => 'j.rieger@connecta.ag',
+    'state' => 'beta',
+    'internal' => '',
+    'uploadfolder' => '0',
+    'createDirs' => '',
+    'clearCacheOnLoad' => 0,
+    'version' => '1.5.0',
+    'constraints' =>
+    [
+        'depends' =>
+        [
+            'typo3' => '9.5.0-11.5.99',
+            'rte_ckeditor' => '9.5.0-11.5.99'
+        ],
+        'conflicts' => [],
+        'suggests' => [],
+    ],
+    'autoload' => [
+        'psr-4' => [
+            'AG\\T3footnotes\\' => 'Classes'
+        ],
+    ],
+];
