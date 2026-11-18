@@ -106,6 +106,9 @@ jobs:
           git archive "$GITHUB_SHA" | tar -x -C "$STAGE"
 
           tag_ref="refs/tags/$GITHUB_REF_NAME"
+          # The checkout step can leave a lightweight copy of an annotated tag.
+          # Fetch the tag object itself, so the annotation is available as upload comment.
+          git fetch --quiet --force --no-tags origin "+$tag_ref:$tag_ref"
           comment=''
           if [[ $(git cat-file -t "$tag_ref") == tag ]]; then
             comment=$(git for-each-ref --format='%(contents)' "$tag_ref")
