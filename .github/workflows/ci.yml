@@ -20,7 +20,7 @@ jobs:
         php: ['8.4', '8.5']
         typo3: [lowest, latest]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
@@ -54,7 +54,7 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Render the TYPO3 manual
@@ -68,7 +68,7 @@ jobs:
     if: github.event_name == 'push' && github.ref_type == 'tag' && !startsWith(github.ref_name, 'v')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           persist-credentials: false
