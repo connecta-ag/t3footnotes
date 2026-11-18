@@ -1,0 +1,44 @@
+categories:
+  t3footnotes:
+    label: Footnotes
+
+settings:
+  t3footnotes.enabled:
+    type: bool
+    default: true
+    label: Render footnotes
+    description: Enable rendering of references and lists for this site.
+    category: t3footnotes
+  t3footnotes.selector:
+    type: string
+    default: main
+    label: List container CSS selector
+    description: >-
+      The list is appended to the first matching container.
+      If the selector has no usable match, the list is appended to the body.
+    category: t3footnotes
+  t3footnotes.heading:
+    type: string
+    default: ''
+    label: List heading
+    description: >-
+      Enter a heading or an LLL reference resolved in the request language.
+      An empty or unresolved value uses the default English or German label.
+    category: t3footnotes
+  t3footnotes.headingLevel:
+    type: int
+    default: 2
+    options:
+      min: 1
+      max: 6
+    label: List heading level
+    description: A local list uses one level deeper, up to level 6.
+    category: t3footnotes
+  t3footnotes.autoLink:
+    type: bool
+    default: false
+    label: Link URLs in note text
+    description: >-
+      Automatically link HTTP and HTTPS URLs in plain text.
+      Existing links and inline code are left intact.
+    category: t3footnotes

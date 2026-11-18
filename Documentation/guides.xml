@@ -1,0 +1,13 @@
+<guides xmlns="https://www.phpdoc.org/guides">
+    <project title="Editorial footnotes" version="2.0" release="2.0.0" copyright="Connecta AG and contributors"/>
+    <extension
+        class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+        project-home="https://extensions.typo3.org/extension/t3footnotes"
+        project-repository="https://github.com/connecta-ag/t3footnotes"
+        project-issues="https://github.com/connecta-ag/t3footnotes/issues"
+        edit-on-github="connecta-ag/t3footnotes"
+        edit-on-github-branch="main"
+        interlink-shortcode="connecta-ag/t3footnotes"
+        typo3-core-preferred="14.3"
+    />
+</guides>

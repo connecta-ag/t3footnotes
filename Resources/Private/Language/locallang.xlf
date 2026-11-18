@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2019-05-21T11:53:03Z" product-name="t3footnotes">
-		<header/>
-		<body>
-			<trans-unit id="tx_t3footnotes.back-to-anchor">
-				<source>Back to text anchor</source>
-			</trans-unit>
-		</body>
-	</file>
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2">
+    <file source-language="en" datatype="plaintext" original="messages">
+        <body>
+            <trans-unit id="heading"><source>Footnotes</source></trans-unit>
+            <trans-unit id="reference"><source>Footnote %d</source></trans-unit>
+            <trans-unit id="backlink"><source>Return to reference %d</source></trans-unit>
+        </body>
+    </file>
 </xliff>

@@ -1,0 +1,8 @@
+rootPageId: 1
+base: https://footnotes.example.invalid/
+dependencies: [connecta-ag/t3footnotes]
+languages:
+  - {title: English, enabled: true, languageId: 0, base: /, locale: en_US.UTF-8}
+  - {title: German, enabled: true, languageId: 1, base: /de/, locale: de_DE.UTF-8, fallbackType: fallback, fallbacks: '0'}
+errorHandling:
+  - {errorCode: 404, errorHandler: Fluid, errorFluidTemplate: 'EXT:t3footnotes/Tests/Functional/Fixtures/404.fluid.html'}

@@ -1,0 +1,133 @@
+/*
+ * The footnote dialog and the balloon of a selected note. Both sit in CKEditor's body
+ * collection outside the editable, so footnote.js loads this file as a document stylesheet.
+ * The rules use CKEditor's tokens, which TYPO3 maps to its light and dark backend scheme, and
+ * TYPO3's text colour tokens where CKEditor's defaults lack contrast on the dark scheme.
+ */
+.ck.ck-dialog.ck-footnote-dialog {
+    inline-size: min(42rem, calc(100vw - 2rem));
+    max-inline-size: calc(100vw - 2rem);
+}
+.ck.ck-dialog.ck-footnote-dialog .ck.ck-form__header {
+    padding: .875rem .75rem .75rem 1.5rem;
+}
+.ck.ck-dialog.ck-footnote-dialog .ck.ck-form__header__label {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+.ck.ck-footnote-dialog .ck-dialog__content {
+    overflow: auto;
+}
+
+.ck.ck-footnote-form {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 1.25rem 1.5rem .5rem;
+    color: var(--ck-color-text);
+    font-size: .9375rem;
+    line-height: 1.45;
+}
+.ck.ck-footnote-form > .ck-label {
+    display: block;
+    font-weight: 600;
+}
+/* Overrides CKEditor's compact input metrics: a note is written, not typed into a field. */
+.ck.ck-footnote-form .ck-input.ck-textarea {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    padding: .625rem .75rem;
+    border-radius: var(--ck-border-radius-control, 4px);
+    color: var(--ck-color-text);
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+.ck.ck-footnote-form .ck-footnote-form__hint,
+.ck.ck-footnote-form .ck-footnote-form__error,
+.ck.ck-footnote-form .ck-footnote-form__notice {
+    margin: 0;
+    font-size: .8125rem;
+    line-height: 1.4;
+}
+.ck.ck-footnote-form .ck-footnote-form__hint {
+    color: var(--typo3-text-color-secondary, var(--ck-color-text-secondary));
+}
+.ck.ck-footnote-form .ck-footnote-form__error {
+    color: var(--typo3-text-color-danger, var(--ck-color-feedback-error));
+    font-weight: 600;
+}
+.ck.ck-footnote-form .ck-footnote-form__notice {
+    padding: .5rem .75rem;
+    border-inline-start: 3px solid var(--typo3-text-color-notice, var(--ck-color-feedback-warning));
+    background: var(--ck-color-feedback-warning-surface, transparent);
+}
+
+.ck.ck-footnote-dialog .ck-dialog__actions {
+    align-items: center;
+    gap: .5rem;
+    padding: 1rem 1.5rem 1.25rem;
+}
+.ck.ck-footnote-dialog .ck-dialog__actions > .ck-button {
+    min-block-size: 2.25rem;
+    padding-inline: .875rem;
+}
+.ck.ck-footnote-dialog .ck-dialog__actions > .ck-footnote-dialog__delete {
+    margin-inline-end: auto;
+    padding-inline-start: .5rem;
+    color: var(--typo3-text-color-danger, var(--ck-color-feedback-error));
+}
+.ck.ck-footnote-dialog .ck-dialog__actions > .ck-footnote-dialog__delete .ck-button__icon {
+    color: inherit;
+}
+.ck.ck-footnote-dialog .ck-dialog__actions > .ck-button-action {
+    font-weight: 600;
+}
+.ck.ck-footnote-dialog .ck-dialog__actions > .ck-button-action .ck-button__keystroke {
+    color: inherit;
+    opacity: .75;
+}
+
+/* The balloon of the selected note would show through the dialog's backdrop. */
+html:has(.ck-dialog.ck-footnote-dialog) .ck.ck-footnote-balloon {
+    visibility: hidden;
+}
+.ck.ck-footnote-balloon .ck-toolbar__items {
+    align-items: center;
+}
+.ck.ck-footnote-preview {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    max-inline-size: min(26rem, 70vw);
+    padding: .25rem .625rem .25rem .5rem;
+    color: var(--ck-color-text);
+    font-size: .875rem;
+    line-height: 1.45;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    cursor: text;
+    user-select: text;
+}
+.ck.ck-footnote-preview_empty {
+    color: var(--typo3-text-color-secondary, var(--ck-color-text-secondary));
+    font-style: italic;
+}
+.ck.ck-footnote-balloon .ck-footnote-delete:not(.ck-disabled):is(:hover, :focus-visible) {
+    color: var(--typo3-text-color-danger, var(--ck-color-feedback-error));
+}
+
+@media (max-width: 30rem) {
+    .ck.ck-footnote-dialog .ck-dialog__actions {
+        flex-wrap: wrap;
+    }
+    .ck.ck-footnote-dialog .ck-dialog__actions > .ck-footnote-dialog__delete {
+        flex-basis: 100%;
+        justify-content: flex-start;
+    }
+}

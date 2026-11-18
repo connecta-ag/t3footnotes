@@ -1,0 +1,5 @@
+rootPageId: 2
+base: https://disabled.example.invalid/
+dependencies: [connecta-ag/t3footnotes]
+languages:
+  - {title: English, enabled: true, languageId: 0, base: /, locale: en_US.UTF-8}

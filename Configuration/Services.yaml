@@ -1,0 +1,5 @@
+services:
+  CAG\T3footnotes\Footnotes: ~
+  CAG\T3footnotes\RenderFootnotes:
+    autowire: true
+    autoconfigure: true
