@@ -1,3 +1,9 @@
+/*
+ * This file is part of the t3footnotes TYPO3 extension.
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 import { Plugin } from '@ckeditor/ckeditor5-core';
 import { ClickObserver, DomEventObserver } from '@ckeditor/ckeditor5-engine';
 import { IconPencil, IconRemove } from '@ckeditor/ckeditor5-icons';

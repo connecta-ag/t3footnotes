@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Manual
+    url: https://docs.typo3.org/p/connecta-ag/t3footnotes/main/en-us/
+    about: Installation, configuration and editor guide
+  - name: Security vulnerability
+    url: https://github.com/connecta-ag/t3footnotes/security/advisories/new
+    about: Report vulnerabilities privately, not as a public issue

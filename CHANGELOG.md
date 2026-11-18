@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.1 – 2026-11-18
+
+- Describes the extension as footnotes for the TYPO3 rich text editor (RTE, CKEditor 5) in the package description, keywords, README and manual.
+- Shows "Jochen Rieger, Connecta AG" as the first author on TER and links the manual from `composer.json`.
+- Adds the license identifier `SPDX-License-Identifier: GPL-2.0-or-later` to every PHP and JavaScript file. The license stays GPL-2.0-or-later.
+- Rewrites the README with a screenshot, features, installation and quick setup.
+- Adds a security policy, issue and pull request templates and weekly Dependabot updates for GitHub Actions. TER and Composer archives leave them out.
+- No changes to rendering, stored markup or configuration.
+
 ## 2.0.0
 
 ### Breaking changes from 1.4.0

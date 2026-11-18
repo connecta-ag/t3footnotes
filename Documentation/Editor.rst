@@ -17,11 +17,11 @@ Place the caret directly after the word or sentence the note explains. Choose
 :guilabel:`Footnote` in the toolbar, enter the note and choose
 :guilabel:`Save`, or press :kbd:`Ctrl+Enter` (:kbd:`Cmd+Enter` on macOS). If
 text is selected, the note is inserted at the selection's active end and the
-selected text is preserved. The toolbar is also accessible with
-:kbd:`Alt+F10` in CKEditor.
+selected text is preserved. In the rich text editor (RTE, CKEditor 5), the
+toolbar is also accessible with :kbd:`Alt+F10`.
 
 ..  figure:: Images/EditorToolbar.png
-    :alt: CKEditor toolbar with the Footnote button highlighted to the
+    :alt: RTE (CKEditor 5) toolbar with the Footnote button highlighted to the
         right of the table button.
     :width: 450px
     :align: center
@@ -76,7 +76,7 @@ the editor.
 
 Delete a selected marker with :kbd:`Delete` or :kbd:`Backspace`, or choose
 :guilabel:`Delete footnote` in the panel or the dialog. You can copy and paste
-markers in CKEditor and use the editor's undo and redo commands.
+markers in the RTE and use the editor's undo and redo commands.
 
 ..  _legacy-note-formatting:
 
