@@ -1,0 +1,5 @@
+t3footnotes:
+  headingLevel: 4
+  autoLink: true
+  selector: '#notes'
+  heading: 'LLL:EXT:t3footnotes/Tests/Functional/Fixtures/Language/locallang.xlf:heading'

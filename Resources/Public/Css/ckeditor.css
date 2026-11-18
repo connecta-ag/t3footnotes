@@ -1,0 +1,83 @@
+/*
+ * The footnote marker on the editor canvas. TYPO3 prefixes each selector with the editor's
+ * "#<id> .ck-content" and replaces body with that prefix, so body is the editable here.
+ * The marker takes its colours from the text around it and from CKEditor's focus colour,
+ * so it works on light and dark canvases. Its offset uses relative positioning and a small
+ * line-height: it rises like a reference mark without making its line taller.
+ */
+.t3foonote.ck-widget {
+    position: relative;
+    inset-block-start: -.3em;
+    display: inline-block;
+    box-sizing: border-box;
+    inline-size: 1.6em;
+    block-size: 1.3em;
+    margin-inline: .14em .08em;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+    border-radius: .375em;
+    background: color-mix(in srgb, currentColor 7%, transparent);
+    color: inherit;
+    font-size: .74em;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    vertical-align: baseline;
+    cursor: pointer;
+    outline: none;
+    transition: background-color .12s ease-out, border-color .12s ease-out, box-shadow .12s ease-out;
+}
+/* A speech bubble with two lines: the footnote toolbar icon reduced for text size. */
+.t3foonote.ck-widget::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    inline-size: 1.05em;
+    block-size: 1.05em;
+    background: currentColor;
+    opacity: .82;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.3 2.4h9.4c.8 0 1.4.6 1.4 1.4v5.6c0 .8-.6 1.4-1.4 1.4H8.2l-3.3 2.8v-2.8H3.3c-.8 0-1.4-.6-1.4-1.4V3.8c0-.8.6-1.4 1.4-1.4z'/%3E%3Cpath d='M5.2 5.6h5.6M5.2 8h3.4'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.3 2.4h9.4c.8 0 1.4.6 1.4 1.4v5.6c0 .8-.6 1.4-1.4 1.4H8.2l-3.3 2.8v-2.8H3.3c-.8 0-1.4-.6-1.4-1.4V3.8c0-.8.6-1.4 1.4-1.4z'/%3E%3Cpath d='M5.2 5.6h5.6M5.2 8h3.4'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.t3foonote__label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+.t3foonote.ck-widget:hover {
+    border-color: color-mix(in srgb, currentColor 60%, transparent);
+    background: color-mix(in srgb, currentColor 15%, transparent);
+    outline: none;
+}
+.t3foonote.ck-widget:hover::before { opacity: 1; }
+/* Selected in the focused editor: the note is the keyboard focus, so it takes the focus colour. */
+.t3foonote.ck-widget.ck-widget_selected,
+.t3foonote.ck-widget.ck-widget_selected:hover {
+    border-color: var(--ck-color-focus-border, #2977ff);
+    background: var(--ck-color-focus-border, #2977ff);
+    color: #fff;
+    box-shadow: 0 0 0 3px var(--ck-color-focus-outer-shadow, rgb(41 119 255 / .3));
+    outline: none;
+}
+.t3foonote.ck-widget.ck-widget_selected::before { opacity: 1; }
+/* Selected while the editor has no focus: outlined only, like CKEditor's other widgets. */
+body.ck-blurred .t3foonote.ck-widget.ck-widget_selected {
+    border-color: var(--ck-color-focus-border, #2977ff);
+    background: color-mix(in srgb, var(--ck-color-focus-border, #2977ff) 14%, transparent);
+    color: inherit;
+    box-shadow: none;
+}
+body.ck-read-only .t3foonote.ck-widget { cursor: default; }
+@media (prefers-reduced-motion: reduce) {
+    .t3foonote.ck-widget { transition: none; }
+}
+@media (forced-colors: active) {
+    .t3foonote.ck-widget { border-color: CanvasText; }
+    .t3foonote.ck-widget::before { background: CanvasText; }
+    .t3foonote.ck-widget.ck-widget_selected { border-color: Highlight; background: Highlight; }
+    .t3foonote.ck-widget.ck-widget_selected::before { background: HighlightText; }
+}

@@ -1,0 +1,7 @@
+parameters:
+    level: 6
+    phpVersion: 80400
+    paths:
+        - ../Classes
+        - ../Tests
+    tmpDir: ../.build/phpstan

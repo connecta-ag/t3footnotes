@@ -1,0 +1,4 @@
+rootPageId: 8
+base: https://no-set.example.invalid/
+languages:
+  - {title: English, enabled: true, languageId: 0, base: /, locale: en_US.UTF-8}

@@ -1,36 +1,78 @@
 {
-  "name": "cag/t3footnotes",
+  "name": "connecta-ag/t3footnotes",
   "type": "typo3-cms-extension",
-  "description": "TYPO3 extension to add footnotes to TYPO3's integrated RTE CKEditor",
+  "description": "Editorial footnotes - Numbered editorial footnotes for TYPO3 and CKEditor 5",
   "homepage": "https://github.com/connecta-ag/t3footnotes",
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "keywords": [
-    "TYPO3 CMS",
-    "gallery",
-    "image",
-    "slider",
-    "lightbox",
-    "extbase",
-    "fluid"
+    "TYPO3",
+    "CKEditor",
+    "footnotes"
   ],
   "authors": [
     {
       "name": "Jochen Rieger",
-      "email": "j.rieger@connecta.ag"
+      "email": "j.rieger@connecta.ag",
+      "role": "Original author"
+    },
+    {
+      "name": "Connecta AG",
+      "homepage": "https://www.connecta.ag/",
+      "role": "Maintainer"
     }
   ],
   "extra": {
     "typo3/cms": {
-      "extension-key": "t3footnotes"
+      "extension-key": "t3footnotes",
+      "version": "2.0.0",
+      "Package": {
+        "providesPackages": {}
+      },
+      "web-dir": ".build/public"
     }
   },
   "require": {
-    "php": ">=7.0,<7.5",
-    "typo3/cms-core": ">=8.7.0,<=10.4.99"
+    "php": "^8.4",
+    "ext-dom": "*",
+    "typo3/cms-core": "^14.3",
+    "typo3/cms-rte-ckeditor": "^14.3",
+    "typo3/cms-frontend": "^14.3"
+  },
+  "replace": {
+    "cag/t3footnotes": "self.version"
   },
   "autoload": {
     "psr-4": {
       "CAG\\T3footnotes\\": "Classes/"
     }
+  },
+  "support": {
+    "issues": "https://github.com/connecta-ag/t3footnotes/issues",
+    "source": "https://github.com/connecta-ag/t3footnotes"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^12.5",
+    "typo3/coding-standards": "^0.9",
+    "typo3/cms-workspaces": "^14.3",
+    "typo3/testing-framework": "^9.5"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "CAG\\T3footnotes\\Tests\\": "Tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "typo3/class-alias-loader": true,
+      "typo3/cms-composer-installers": true
+    },
+    "sort-packages": true
+  },
+  "scripts": {
+    "test:unit": "phpunit -c Build/Unit.xml",
+    "test:functional": "env typo3DatabaseDriver=pdo_sqlite phpunit -c Build/Functional.xml",
+    "test:phpstan": "phpstan analyse -c Build/phpstan.neon --no-progress",
+    "test:coding-standards": "php-cs-fixer check --config=Build/php-cs-fixer.php --diff"
   }
 }

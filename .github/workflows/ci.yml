@@ -1,0 +1,122 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.4', '8.5']
+        typo3: [lowest, latest]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, pdo_sqlite
+          tools: composer:v2
+          coverage: none
+      - name: Verify release tag version
+        if: github.event_name == 'push' && github.ref_type == 'tag'
+        run: |
+          php <<'PHP'
+          <?php
+          $manifest = json_decode(file_get_contents("composer.json"), true, 512, JSON_THROW_ON_ERROR);
+          $version = $manifest["extra"]["typo3/cms"]["version"] ?? "";
+          $tag = getenv("GITHUB_REF_NAME");
+          if ($version === "" || ($tag !== $version && $tag !== "v" . $version)) {
+              fwrite(STDERR, "Release tag " . $tag . " does not match composer.json version " . $version . PHP_EOL);
+              exit(1);
+          }
+          PHP
+      - run: composer validate --strict
+      - if: matrix.typo3 == 'lowest'
+        # Exercise the declared floor even after security updates supersede it.
+        run: composer update --with=typo3/cms-core:14.3.0 --with=typo3/cms-frontend:14.3.0 --with=typo3/cms-rte-ckeditor:14.3.0 --no-blocking --no-audit --no-interaction --prefer-dist
+      - if: matrix.typo3 == 'latest'
+        run: composer update --no-interaction --prefer-dist
+      - run: composer test:unit
+      - run: composer test:functional
+      - run: composer test:phpstan
+      - run: composer test:coding-standards
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Render the TYPO3 manual
+        run: >
+          docker run --rm --pull always -v "$PWD:/project"
+          ghcr.io/typo3-documentation/render-guides:latest
+          --config=Documentation --no-progress --fail-on-log
+
+  publish:
+    needs: [checks, docs]
+    if: github.event_name == 'push' && github.ref_type == 'tag' && !startsWith(github.ref_name, 'v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: intl, mbstring, zip, curl
+          tools: composer:v2
+          coverage: none
+      - name: Verify the publication tag
+        shell: bash
+        run: |
+          php <<'PHP'
+          <?php
+          $manifest = json_decode(file_get_contents("composer.json"), true, 512, JSON_THROW_ON_ERROR);
+          $version = $manifest["extra"]["typo3/cms"]["version"] ?? "";
+          $tag = getenv("GITHUB_REF_NAME") ?: "";
+          if ($tag !== $version || !preg_match('/^\d+\.\d+\.\d+$/D', $tag)) {
+              fwrite(STDERR, "The publication tag must match composer.json version " . $version . " without a v prefix." . PHP_EOL);
+              exit(1);
+          }
+          PHP
+      - name: Install Tailor
+        run: |
+          mkdir -p "$RUNNER_TEMP/tailor"
+          composer --working-dir="$RUNNER_TEMP/tailor" require typo3/tailor:2.1.0 --prefer-dist --no-progress --no-interaction
+      - name: Publish the staged release to TER
+        shell: bash
+        env:
+          TYPO3_API_TOKEN: ${{ secrets.TYPO3_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          STAGE=$(mktemp -d "$RUNNER_TEMP/t3footnotes.XXXXXX")
+          trap 'rm -rf -- "$STAGE"' EXIT
+          git archive "$GITHUB_SHA" | tar -x -C "$STAGE"
+
+          tag_ref="refs/tags/$GITHUB_REF_NAME"
+          comment=''
+          if [[ $(git cat-file -t "$tag_ref") == tag ]]; then
+            comment=$(git for-each-ref --format='%(contents)' "$tag_ref")
+            signature=$(git for-each-ref --format='%(contents:signature)' "$tag_ref")
+            if [[ -n $signature ]]; then
+              comment=$(printf '%s' "${comment%"$signature"}")
+            fi
+          fi
+          if [[ ! $comment =~ [^[:space:]] ]]; then
+            comment='Editorial footnotes release'
+          fi
+
+          "$RUNNER_TEMP/tailor/vendor/bin/tailor" ter:publish "$GITHUB_REF_NAME" t3footnotes \
+            --path="$STAGE" --comment="$comment" --no-interaction

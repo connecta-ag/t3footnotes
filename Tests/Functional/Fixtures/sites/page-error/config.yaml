@@ -1,0 +1,7 @@
+rootPageId: 6
+base: https://page-error.example.invalid/
+dependencies: [connecta-ag/t3footnotes]
+languages:
+  - {title: English, enabled: true, languageId: 0, base: /, locale: en_US.UTF-8}
+errorHandling:
+  - {errorCode: 404, errorHandler: Page, errorContentSource: 't3://page?uid=7'}
