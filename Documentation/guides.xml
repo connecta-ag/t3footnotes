@@ -1,5 +1,5 @@
 <guides xmlns="https://www.phpdoc.org/guides">
-    <project title="Editorial footnotes" version="2.0" release="2.0.0" copyright="Connecta AG and contributors"/>
+    <project title="Editorial footnotes" version="2.0" release="2.0.1" copyright="Connecta AG and contributors"/>
     <extension
         class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
         project-home="https://extensions.typo3.org/extension/t3footnotes"
